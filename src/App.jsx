@@ -2,6 +2,10 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import 'semantic-ui-css/semantic.min.css'
+import { Button } from 'semantic-ui-react'
+import { Input } from 'semantic-ui-react'
+import { Checkbox } from 'semantic-ui-react'
 
 
 
@@ -30,21 +34,29 @@ function App() {
   console.log.list;
   return (
     <>
-      <h1>To Do</h1>
+      
       <div>
-        <form action="" onSubmit={handleAdd}>
-          <input type="text" value={task} placeholder='Ajouter une tâche' onChange={handleInputChange}/>
-          <button type='submit'>Add</button>
-        </form>
+        <div className="ajout">
+          <h1>To Do</h1>
+          <form action="" onSubmit={handleAdd}>
+            <Input size='large' value={task} type="text"  placeholder='Ajouter une tâche' className='new' onChange={handleInputChange}/>
+            <Button positive  type='submit'>Add</Button>
+          </form>
+        </div>
         <ul>
           {list.map((activity,index)=>(
             <>
-              <span key={index}>
-              <input type="checkbox" />
-              {activity}
-              <button onClick={()=>handleDeleteTask(index)}>Delete</button>
-              
-              </span><br />
+              <div className='line'>
+                <span key={index} className='tache'>
+                  <div className="check">
+                    <Checkbox className='checkbox' />
+                  </div>
+                  <div className="activite">{activity}</div>
+                  <div className="delete">
+                    <Button basic color='red' icon='delete' onClick={()=>handleDeleteTask(index)} className='delbutton'></Button>
+                  </div>
+                </span>
+              </div><br />
             </>
           ))}
         </ul>
