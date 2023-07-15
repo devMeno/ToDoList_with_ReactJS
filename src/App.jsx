@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
@@ -13,13 +13,23 @@ function App() {
 	const [task, setTask] = useState('');
 	const [list, setList] = useState([]);
 
+	useEffect(() => {
+		const allTasks = async () => {
+			const response = await fetch('http://localhost:3000/backend/getTask.php');
+			const t = await response.json();
+			console.log(t);
+			setList(t);
+		};
+		allTasks();
+	}, []);
+
 	async function handleAdd(event) {
-		event.prevenDefault();
+		event.preventDefault();
 		console.log(task);
 		if (task.length > 2) {
 
-			const form = new FormData;
-			form.append('tache', task);
+			const form = new FormData();
+			form.append('new', task);
 
 			await fetch('http://localhost:3000/backend/addTask.php', {
 				method: "POST",
@@ -36,35 +46,42 @@ function App() {
 		setTask(event.target.value);
 	}
 
-	function handleDeleteTask(place) {
+	function handleDeleteTask() {
+		/*const undesirable = new FormData();
+		undesirable.append('new', task.id);
+
+		await fetch('http://localhost:3000/backend/deleteTask.php', {
+			method: "POST",
+			body: undesirable
+		});*/
 		const changedList = [...list];
-		changedList.splice(place, 1);
+		changedList.splice(place, task.id);
 		setList(changedList);
 	}
 
-	console.log.list;
+	//console.log.list;
 	return (
 		<>
 
 			<div>
 				<div className="ajout">
 					<h1>To Do</h1>
-					<form action="POST" onSubmit={handleAdd}>
+					<form action="">
 						<Input size='large' value={task} type="text" placeholder='Ajouter une tâche' className='new' onChange={handleInputChange} />
-						<Button positive type='submit'>Add</Button>
+						<Button positive type='submit' onClick={handleAdd}>Add</Button>
 					</form>
 				</div>
 				<ul>
-					{list.map((activity, index) => (
+					{list.map((activity) => (
 						<>
 							<div className='line'>
-								<span key={index} className='tache'>
+								<span key={activity.id} className='tache'>
 									<div className="check">
 										<Checkbox className='checkbox' />
 									</div>
-									<div className="activite">{activity}</div>
+									<div className="activite">{activity.tache}</div>
 									<div className="delete">
-										<Button basic color='red' icon='delete' onClick={() => handleDeleteTask(index)} className='delbutton'></Button>
+										<Button basic color='red' icon='delete' onClick={handleDeleteTask} className='delbutton'></Button>
 									</div>
 								</span>
 							</div><br />

@@ -1,5 +1,6 @@
 <?php
 header('Content-Type: application/json');
+header("Access-Control-Allow-Origin:*");
 include("dbConnexion.php");
 
 $requete = "SELECT * FROM activity";
